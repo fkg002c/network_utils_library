@@ -1,0 +1,55 @@
+buildscript {
+    apply from: 'version.gradle'
+}
+
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace = 'com.fkg002c.networkutils'
+    compileSdk = 36
+    resourcePrefix("libnetworkutils")
+
+    defaultConfig {
+        minSdk = 24
+        targetSdk = 36
+
+        manifestPlaceholders["libNetworkUtilsVersion"] = "${libVersionName}"
+        buildConfigField("String", "VERSION_NAME", "\"${libVersionName}\"")
+        buildConfigField("Integer", "VERSION_CODE", "${libVersionCode}")
+
+        buildConfigField("Boolean", "SINGLE_LOG_TAG", "true")
+
+        consumerProguardFiles 'consumer-proguard-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    libraryVariants.configureEach { variant ->
+        variant.outputs.each { output ->
+            output.outputFileName = "libnetworkutils_${variant.name}.aar"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+}
