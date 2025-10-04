@@ -1,0 +1,16 @@
+ext {
+    libVersionMajor = 0
+    libVersionMinor = 0
+    libVersionPatch = 1
+
+    libVersionCode = getVersionCode(libVersionMajor, libVersionMinor, libVersionPatch)
+    libVersionName = getVersionName(libVersionMajor, libVersionMinor, libVersionPatch)
+}
+
+private Integer getVersionCode(Integer major, Integer minor, Integer patch) {
+    return major * 10000 + minor * 100 + patch
+}
+
+private String getVersionName(Integer major, Integer minor, Integer patch) {
+    return "${major}.${minor}.${patch}"
+}
