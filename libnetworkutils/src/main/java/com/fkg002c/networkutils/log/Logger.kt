@@ -4,6 +4,7 @@ import com.fkg002c.networkutils.BuildConfig
 import android.util.Log as Logcat
 
 interface ILogger {
+    fun verbose(log: Pair<String, String>)
     fun debug(log: Pair<String, String>)
     fun info(log: Pair<String, String>)
     fun warn(log: Pair<String, String>)
@@ -20,6 +21,10 @@ object Log {
 }
 
 internal object LogcatLogger : ILogger {
+    override fun verbose(log: Pair<String, String>) {
+        Logcat.v(log.first, log.second)
+    }
+
     override fun debug(log: Pair<String, String>) {
         Logcat.d(log.first, log.second)
     }
@@ -54,6 +59,10 @@ object Logger {
     }
 
     private fun getLogger(): ILogger = externalLogger ?: LogcatLogger
+    fun v(tag: String, message: String) {
+        if (LOG_LEVEL <= Log.VERBOSE) getLogger().verbose(getLog(tag, message))
+    }
+
     fun d(tag: String, message: String) {
         if (LOG_LEVEL <= Log.DEBUG) getLogger().debug(getLog(tag, message))
     }
