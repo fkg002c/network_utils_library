@@ -2,6 +2,8 @@
 
 package com.fkg002c.networkutils
 
+import android.Manifest.permission.READ_BASIC_PHONE_STATE
+import android.Manifest.permission.READ_PHONE_STATE
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
@@ -21,11 +23,16 @@ import kotlin.coroutines.resume
 private const val TAG = "TelephonyUtils"
 
 @SuppressLint("MissingPermission")
-internal suspend fun getWnt(context: Context, timeout: Long = 1000): Wnt {
+internal suspend fun getWnt(context: Context, timeout: Long = 100): Wnt {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
         return context.getSystemService(TelephonyManager::class.java)?.let {
             try {
-                Wnt.networkTypeToWnt(it.dataNetworkType)
+                if (context.hasGranted(READ_PHONE_STATE) || context.hasGranted(READ_BASIC_PHONE_STATE)) {
+                    Wnt.networkTypeToWnt(it.dataNetworkType)
+                } else {
+                    Logger.e(TAG, "getWnt() error: no read phone state permission")
+                    Wnt.UNKNOWN
+                }
             } catch (e: Exception) {
                 Logger.e(TAG, "getWnt() error: ${e.message}")
                 Wnt.UNKNOWN

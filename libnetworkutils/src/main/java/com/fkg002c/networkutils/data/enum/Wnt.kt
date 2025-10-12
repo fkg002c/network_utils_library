@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import com.fkg002c.networkutils.log.Logger
 
 // Wireless network technologies
+@Suppress("DEPRECATION")
 enum class Wnt {
     UNKNOWN,
     TWO_G,

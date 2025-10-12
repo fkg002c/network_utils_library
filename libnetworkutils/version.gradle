@@ -1,7 +1,7 @@
 ext {
     libVersionMajor = 0
     libVersionMinor = 1
-    libVersionPatch = 0
+    libVersionPatch = 1
 
     libVersionCode = getVersionCode(libVersionMajor, libVersionMinor, libVersionPatch)
     libVersionName = getVersionName(libVersionMajor, libVersionMinor, libVersionPatch)
